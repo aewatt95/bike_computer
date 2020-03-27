@@ -201,8 +201,9 @@ void ST7789::delay(uint8_t time){
 	HAL_Delay(time);
 }
 
-void ST7789::displayInit(uint8_t *addr) {
+void ST7789::init() {
 
+  uint8_t *addr = ST7789::generic_st7789;
   uint8_t  numCommands, cmd, numArgs;
   uint16_t ms;
 
@@ -221,4 +222,5 @@ void ST7789::displayInit(uint8_t *addr) {
       delay(ms);
     }
   }
+  writeCommand(ST77XX_INVON);
 }

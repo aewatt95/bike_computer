@@ -64,7 +64,7 @@ class ST7789 {
 public:
 	void sendCommand(uint8_t commandByte, uint8_t *dataBytes, uint8_t numDataBytes);
 	void delay(uint8_t time);
-	void displayInit(uint8_t *addr);
+	void init();
 	void setAddrWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
 	void writeCommand(uint8_t cmd);
 	void drawBox(uint8_t xStart, uint8_t yStart, uint8_t width, uint8_t height, uint16_t color);
@@ -74,11 +74,8 @@ public:
 	void drawMonochromeBitmap(const uint8_t* bitmap, uint8_t xStart, uint8_t yStart, uint8_t width, uint8_t height, uint16_t color,  uint8_t transparent);
 	void drawVerticalBar(uint8_t xStart, uint8_t yStart, uint8_t width, uint8_t height, uint8_t percentage, uint16_t color, uint8_t update);
 
-	void SPI_WRITE32(uint32_t data);
-	uint16_t fastrand();
-
 private:
-	constexpr static uint8_t generic_st7789[] =  {        // Init commands for 7789 screens
+	uint8_t generic_st7789[41] =  {        // Init commands for 7789 screens
 			11,                              	//  9 commands in list:
 			ST77XX_SWRESET,   ST_CMD_DELAY, 	//  1: Software reset, no args, w/delay
 			150,                          		//     ~150 ms delay
@@ -108,6 +105,9 @@ private:
 			ST77XX_DISPON ,   ST_CMD_DELAY, 	//  9: Main screen turn on, no args, delay
 			10,
 			ST77XX_TEON, 0, 0x00};              //    10 ms delay
+
+	void SPI_WRITE32(uint32_t data);
+	uint16_t fastrand();
 
 };
 
