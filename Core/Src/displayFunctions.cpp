@@ -10,7 +10,7 @@
 extern SPI_HandleTypeDef hspi1;
 
 
-void ST7789::printText(const char* text, uint8_t x, uint8_t y, uint16_t color)
+void ST7789::print(const char* text, uint8_t x, uint8_t y, uint16_t color)
 {
 	uint8_t index = 0;
 	while (*(text + index) != '\0') {
@@ -30,7 +30,7 @@ void ST7789::printText(const char* text, uint8_t x, uint8_t y, uint16_t color)
 
 }
 
-uint16_t ST7789generateColor(uint8_t red, uint8_t green, uint8_t blue){
+uint16_t ST7789::generateColor(uint8_t red, uint8_t green, uint8_t blue){
 	return ((blue >> 4) << 10) + ((red >> 3) << 4) + (green >> 4);
 }
 
@@ -75,6 +75,15 @@ void ST7789::drawVerticalBar(uint8_t xStart, uint8_t yStart, uint8_t width, uint
 
 	drawBox(xStart+1, yStart+1, width-2, (height-2) - calcHeight, generateColor(10, 10, 10));
 	drawBox(xStart+1, yStart + (height-2) - calcHeight, width-2, calcHeight+1, color);
+}
+
+void ST7789::drawHorizontalBar(uint8_t xStart, uint8_t yStart, uint8_t width, uint8_t height, uint8_t percentage, uint16_t color, uint8_t update){
+	if(!update)
+		drawBox(xStart, yStart, width, height, ST77XX_WHITE);
+	uint8_t calcWidth = ((width-3)/255.0) * percentage;
+
+	drawBox(xStart+1, yStart+1, calcWidth + 1, height-2, color);
+	drawBox(xStart + calcWidth + 1, yStart + 1, width - calcWidth - 2, height-2, generateColor(10, 10, 10));
 }
 
 void ST7789::drawPixel(uint8_t x, uint8_t y, uint16_t color){
@@ -122,7 +131,7 @@ void ST7789::drawMonochromeBitmap(const uint8_t* bitmap, uint8_t xStart, uint8_t
 		for(int y=0; y<height; y++){
 			for(int x=0; x<(width/8); x++){
 				for(int bit=8; bit>0; bit--){
-					uint8_t pixelOverride = ~(bitmap[(y*(width/8)) + (x)] >> (bit-1)) & 1;
+					uint8_t pixelOverride = (bitmap[(y*(width/8)) + (x)] >> (bit-1)) & 1;
 					if(pixelOverride){
 						drawPixel(xStart+(x*8)+(8-bit), yStart+y, color);
 					}
@@ -223,4 +232,5 @@ void ST7789::init() {
     }
   }
   writeCommand(ST77XX_INVON);
+  drawBox(0, 0, 240, 240, ST77XX_BLACK);
 }

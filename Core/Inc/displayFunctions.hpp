@@ -69,10 +69,13 @@ public:
 	void writeCommand(uint8_t cmd);
 	void drawBox(uint8_t xStart, uint8_t yStart, uint8_t width, uint8_t height, uint16_t color);
 	void drawPixel(uint8_t x, uint8_t y, uint16_t color);
-	void printText(const char* text, uint8_t x, uint8_t y, uint16_t color);
+	void print(const char* text, uint8_t x, uint8_t y, uint16_t color);
 	uint16_t generateColor(uint8_t red, uint8_t green, uint8_t blue);
 	void drawMonochromeBitmap(const uint8_t* bitmap, uint8_t xStart, uint8_t yStart, uint8_t width, uint8_t height, uint16_t color,  uint8_t transparent);
 	void drawVerticalBar(uint8_t xStart, uint8_t yStart, uint8_t width, uint8_t height, uint8_t percentage, uint16_t color, uint8_t update);
+	void drawHorizontalBar(uint8_t xStart, uint8_t yStart, uint8_t width, uint8_t height, uint8_t percentage, uint16_t color, uint8_t update);
+
+
 
 private:
 	uint8_t generic_st7789[41] =  {        // Init commands for 7789 screens
